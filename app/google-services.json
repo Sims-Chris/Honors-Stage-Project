@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "659628659603",
+    "project_id": "honors-stage-project",
+    "storage_bucket": "honors-stage-project.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:659628659603:android:9452efcea9ae8eab65ce66",
+        "android_client_info": {
+          "package_name": "com.example.hsp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8Z85YqOJzLXgLWpLhUq1hbNeV-0zVsak"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

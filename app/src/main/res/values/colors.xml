@@ -2,4 +2,10 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="colorPrimaryDark">#1D293D</color> <!-- 1D293D  192438  314158-->
+    <color name="colorPrimary">#192438</color>
+    <color name="colorAccent">#314158</color>
+    <color name="textColor">#FFFFFF</color>
+    <color name="buttonColor">#009966</color>
+    <color name="toggleButtonColor">#1D293D</color>
 </resources>

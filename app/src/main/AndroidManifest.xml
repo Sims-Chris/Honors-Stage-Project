@@ -23,6 +23,18 @@
         <activity
             android:name=".HomeActivity"
             android:exported="false" />
+        <activity
+            android:name=".WorkoutActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CalendarActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LogActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ProfileActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

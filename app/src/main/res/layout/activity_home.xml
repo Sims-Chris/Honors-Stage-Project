@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
+    android:background="@color/colourPrimary"
     tools:context=".HomeActivity">
 
     <include
@@ -18,9 +18,9 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:text="Log Out"
-        android:textColor="@color/textColor"
+        android:textColor="@color/textColour"
         app:icon="@drawable/menu_logout"
-        app:iconTint="@color/textColor"
+        app:iconTint="@color/textColour"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -38,7 +38,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
-        app:cardBackgroundColor="@color/colorPrimaryDark"
+        app:cardBackgroundColor="@color/colourPrimaryDark"
         app:cardCornerRadius="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -54,7 +54,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Today:"
-                android:textColor="@color/textColor"
+                android:textColor="@color/textColour"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -65,7 +65,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="Upper Body Power Training"
-                android:textColor="@color/textColor"
+                android:textColor="@color/textColour"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
@@ -76,7 +76,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="(Bouldering specific)"
-                android:textColor="@color/textColor"
+                android:textColor="@color/textColour"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/workout_title" />
 
@@ -86,7 +86,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="- Max 3 rep pull up x5\n- Campus Latches\n- Campus Boulder\n- One arm assisted pull ups\n- Two arm lock off\n- One arm assisted lock off"
-                android:textColor="@color/textColor"
+                android:textColor="@color/textColour"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/workout_subtitle" />
 
@@ -96,8 +96,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="Start Workout"
-                android:textColor="@color/textColor"
-                app:backgroundTint="@color/buttonColor"
+                android:textColor="@color/textColour"
+                app:backgroundTint="@color/buttonColour"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/workout_details" />
@@ -112,7 +112,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
-        app:cardBackgroundColor="@color/colorPrimaryDark"
+        app:cardBackgroundColor="@color/colourPrimaryDark"
         app:cardCornerRadius="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -128,7 +128,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Current Streak"
-                android:textColor="@color/textColor"
+                android:textColor="@color/textColour"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -150,7 +150,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:text="5 Days"
-                android:textColor="@color/textColor"
+                android:textColor="@color/textColour"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/flame_icon"
@@ -168,7 +168,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
-        app:cardBackgroundColor="@color/colorPrimaryDark"
+        app:cardBackgroundColor="@color/colourPrimaryDark"
         app:cardCornerRadius="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -184,7 +184,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Total Workouts"
-                android:textColor="@color/textColor"
+                android:textColor="@color/textColour"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -206,7 +206,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:text="5"
-                android:textColor="@color/textColor"
+                android:textColor="@color/textColour"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/calendar_icon"

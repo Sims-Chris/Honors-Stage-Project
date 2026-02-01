@@ -7,25 +7,34 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.button.MaterialButtonToggleGroup
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var db: FirebaseFirestore
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        auth = FirebaseAuth.getInstance()
+        db = FirebaseFirestore.getInstance()
+
+        // Check if user is already logged in
+        if (auth.currentUser != null) {
+            startActivity(Intent(this, HomeActivity::class.java))
+            finish()
+        }
+
         setContentView(R.layout.login)
         setupUI()
     }
 
     private fun setupUI() {
         val toggleGroup = findViewById<MaterialButtonToggleGroup>(R.id.toggle_button_group)
-        toggleGroup.addOnButtonCheckedListener { _, checkedId, isChecked ->
+        toggleGroup?.addOnButtonCheckedListener { _, checkedId, isChecked ->
             if (isChecked) {
                 when (checkedId) {
                     R.id.login_toggle_button -> {
@@ -48,33 +57,23 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupLoginScreen() {
-        db = FirebaseFirestore.getInstance()
-
         val username = findViewById<EditText>(R.id.username)
         val password = findViewById<EditText>(R.id.password)
         val login = findViewById<Button>(R.id.login)
 
         login.setOnClickListener {
-            val email = username.text.toString()
-            val password = password.text.toString()
+            val email = username.text.toString().trim()
+            val pass = password.text.toString().trim()
 
-            if (email.isNotEmpty() && password.isNotEmpty()) {
-                db.collection("Users")
-                    .whereEqualTo("Email", email)
-                    .whereEqualTo("Password", password)
-                    .get()
-                    .addOnSuccessListener { documents ->
-                        if (!documents.isEmpty) {
-                            Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show()
-                            val intent = Intent(this, HomeActivity::class.java)
-                            startActivity(intent)
-                            finish()
-                        } else {
-                            Toast.makeText(this, "Invalid credentials", Toast.LENGTH_SHORT).show()
-                        }
+            if (email.isNotEmpty() && pass.isNotEmpty()) {
+                auth.signInWithEmailAndPassword(email, pass)
+                    .addOnSuccessListener {
+                        Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show()
+                        startActivity(Intent(this, HomeActivity::class.java))
+                        finish()
                     }
                     .addOnFailureListener { e ->
-                        Toast.makeText(this, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Login Failed: ${e.message}", Toast.LENGTH_SHORT).show()
                     }
             } else {
                 Toast.makeText(this, "Please enter email and password", Toast.LENGTH_SHORT).show()
@@ -83,8 +82,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupSignUpScreen() {
-        db = FirebaseFirestore.getInstance()
-
         val firstName = findViewById<EditText>(R.id.first_name)
         val lastName = findViewById<EditText>(R.id.last_name)
         val username = findViewById<EditText>(R.id.username)
@@ -92,27 +89,33 @@ class MainActivity : AppCompatActivity() {
         val signupButton = findViewById<Button>(R.id.signup_button)
 
         signupButton.setOnClickListener {
-            val fName = firstName.text.toString()
-            val lName = lastName.text.toString()
-            val email = username.text.toString()
-            val pass = password.text.toString()
+            val fName = firstName.text.toString().trim()
+            val lName = lastName.text.toString().trim()
+            val email = username.text.toString().trim()
+            val pass = password.text.toString().trim()
 
             if (fName.isNotEmpty() && lName.isNotEmpty() && email.isNotEmpty() && pass.isNotEmpty()) {
-                val user = hashMapOf(
-                    "FirstName" to fName,
-                    "LastName" to lName,
-                    "Email" to email,
-                    "Password" to pass
-                )
-
-                db.collection("Users")
-                    .add(user)
-                    .addOnSuccessListener {                        Toast.makeText(this, "Sign up successful!", Toast.LENGTH_SHORT).show()
-                        setContentView(R.layout.login)
-                        setupUI()
+                auth.createUserWithEmailAndPassword(email, pass)
+                    .addOnSuccessListener { authResult ->
+                        val userId = authResult.user?.uid
+                        if (userId != null) {
+                            val user = hashMapOf(
+                                "FirstName" to fName,
+                                "LastName" to lName,
+                                "Email" to email
+                                // Password should not be stored in Firestore for security
+                            )
+                            db.collection("Users").document(userId)
+                                .set(user)
+                                .addOnSuccessListener {
+                                    Toast.makeText(this, "Sign up successful!", Toast.LENGTH_SHORT).show()
+                                    startActivity(Intent(this, HomeActivity::class.java))
+                                    finish()
+                                }
+                        }
                     }
                     .addOnFailureListener { e ->
-                        Toast.makeText(this, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Sign up Failed: ${e.message}", Toast.LENGTH_SHORT).show()
                     }
             } else {
                 Toast.makeText(this, "Please fill out all fields", Toast.LENGTH_SHORT).show()

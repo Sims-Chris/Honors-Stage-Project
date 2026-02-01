@@ -10,6 +10,7 @@ import com.google.firebase.auth.FirebaseAuth
 class HomeActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
+    private lateinit var bottomNavManager: BottomNavManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +33,11 @@ class HomeActivity : AppCompatActivity() {
         }
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
-        val bottomNavManager = BottomNavManager(this, bottomNavigationView)
+        bottomNavManager = BottomNavManager(this, bottomNavigationView)
+    }
+
+    override fun onResume() {
+        super.onResume()
         bottomNavManager.setupBottomNav(R.id.nav_home)
     }
 }

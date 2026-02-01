@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="CruxBook"
-        android:textColor="@color/textColor"
+        android:textColor="@color/textColour"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"

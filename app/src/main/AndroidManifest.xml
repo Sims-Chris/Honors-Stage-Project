@@ -30,7 +30,7 @@
             android:name=".CalendarActivity"
             android:exported="false" />
         <activity
-            android:name=".LogActivity"
+            android:name=".RouteActivity"
             android:exported="false" />
         <activity
             android:name=".ProfileActivity"

@@ -4,26 +4,88 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
+    android:background="@color/colourPrimary"
     tools:context=".CalendarActivity">
 
-    <TextView
+    <include
+        layout="@layout/logo" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/logout_button"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Calendar Screen"
-        android:textColor="@color/textColor"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="Log Out"
+        android:textColor="@color/textColour"
+        app:icon="@drawable/menu_logout"
+        app:iconTint="@color/textColour"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <include
-        layout="@layout/bottom_nav"
-        android:layout_width="0dp"
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/header_barrier"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="app_name,logout_button" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/dividerColour"
+        app:layout_constraintTop_toBottomOf="@id/header_barrier" />
+
+    <!-- Main Content Area -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/bottom_nav_container"
+        app:layout_constraintTop_toBottomOf="@id/divider">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Calendar Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="@color/calendarBackground"
+                android:layout_marginBottom="16dp">
+
+                <CalendarView
+                    android:id="@+id/calendar_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:theme="@style/WhiteCalendar" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Workout List -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/workout_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                tools:listitem="@layout/item_workout_summary" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Bottom Nav -->
+    <FrameLayout
+        android:id="@+id/bottom_nav_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent">
+        <include layout="@layout/bottom_nav" />
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

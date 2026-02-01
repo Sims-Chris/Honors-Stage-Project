@@ -2,6 +2,18 @@
 <resources>
     <style name="ToggleButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="android:backgroundTint">@color/toggle_button_selector</item>
-        <item name="android:textColor">@color/textColor</item>
+        <item name="android:textColor">@color/textColour</item>
+    </style>
+
+    <style name="WhiteCalendar" parent="Theme.AppCompat">
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorSecondary">@color/white</item>
+        <item name="android:textColorPrimaryInverse">@color/white</item>
+        <item name="android:dateTextAppearance">@style/CalendarDateTextAppearance</item>
+        <item name="android:weekDayTextAppearance">@style/CalendarDateTextAppearance</item>
+    </style>
+
+    <style name="CalendarDateTextAppearance" parent="TextAppearance.AppCompat.Small">
+        <item name="android:textColor">@color/white</item>
     </style>
 </resources>

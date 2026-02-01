@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
+    android:background="@color/colourPrimary"
     tools:context=".MainActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -51,7 +51,7 @@
             android:layout_marginStart="24dp"
             android:layout_marginBottom="8dp"
             android:text="Email:"
-            android:textColor="@color/textColor"
+            android:textColor="@color/textColour"
             app:layout_constraintBottom_toTopOf="@+id/username"
             app:layout_constraintStart_toStartOf="@+id/username" />
 
@@ -66,7 +66,7 @@
             android:inputType="textEmailAddress"
             android:padding="12dp"
             android:text="example@email.com"
-            android:textColor="@color/textColor"
+            android:textColor="@color/textColour"
             android:textColorHint="#9E9E9E"
             app:layout_constraintBottom_toTopOf="@+id/password_label"
             app:layout_constraintEnd_toEndOf="parent"
@@ -81,7 +81,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp"
             android:text="Password:"
-            android:textColor="@color/textColor"
+            android:textColor="@color/textColour"
             app:layout_constraintBottom_toTopOf="@+id/password"
             app:layout_constraintStart_toStartOf="@+id/password" />
 
@@ -96,7 +96,7 @@
             android:inputType="textPassword"
             android:padding="12dp"
             android:text="Password"
-            android:textColor="@color/textColor"
+            android:textColor="@color/textColour"
             android:textColorHint="#9E9E9E"
             app:layout_constraintBottom_toTopOf="@+id/login"
             app:layout_constraintEnd_toEndOf="parent"
@@ -110,9 +110,9 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="24dp"
-            app:backgroundTint="@color/buttonColor"
+            app:backgroundTint="@color/buttonColour"
             android:text="Login"
-            android:textColor="@color/textColor"
+            android:textColor="@color/textColour"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -90,6 +90,10 @@ class CalendarActivity : AppCompatActivity() {
             .document(dateString)
             .get()
             .addOnSuccessListener { document ->
+                if (isDestroyed || isFinishing) {
+                    return@addOnSuccessListener
+                }
+
                 if (document.exists()) {
                     val workouts = mutableListOf<WorkoutSummary>()
                     val data = document.data
@@ -133,6 +137,9 @@ class CalendarActivity : AppCompatActivity() {
     }
 
     private fun showNoPlan() {
+        if (isDestroyed || isFinishing) {
+            return
+        }
         workoutAdapter.updateWorkouts(listOf(
             WorkoutSummary("", "No plan for this day", "", "")
         ))

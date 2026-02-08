@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="colourPrimary">#192438</color>
+    <color name="colourPrimaryDark">#1D293D</color>
+    <color name="colourAccent">#314158</color>
+    <color name="textColour">#FFFFFF</color>
+    <color name="textColourSecondary">#CBD5E0</color>
+    <color name="buttonColour">#009966</color>
+    <color name="dividerColour">#374151</color>
+    <color name="cardBackground">#2D3748</color>
+    <color name="calendarBackground">#2D3748</color>
+    <color name="toggleButtonColour">#1D293D</color>
+</resources>

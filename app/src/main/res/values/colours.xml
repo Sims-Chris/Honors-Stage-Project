@@ -12,4 +12,5 @@
     <color name="cardBackground">#2D3748</color>
     <color name="calendarBackground">#2D3748</color>
     <color name="toggleButtonColour">#1D293D</color>
+    <color name="climberColour">#FF0000</color>
 </resources>

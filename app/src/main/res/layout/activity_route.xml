@@ -31,7 +31,10 @@
         app:barrierDirection="bottom"
         app:constraint_referenced_ids="app_name,logout_button" />
 
+
+    <!-- src: https://www.nytimes.com/interactive/2017/06/05/us/el-capitan-solo-freerider-climb-alex-honnold.html -->
     <androidx.cardview.widget.CardView
+
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_margin="16dp"
@@ -40,10 +43,10 @@
         app:layout_constraintBottom_toTopOf="@+id/bottom_navigation_container"
         app:layout_constraintTop_toBottomOf="@id/header_barrier">
 
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <!-- src: https://www.nytimes.com/interactive/2017/06/05/us/el-capitan-solo-freerider-climb-alex-honnold.html -->
             <ImageView
                 android:id="@+id/route_image"
                 android:layout_width="match_parent"
@@ -52,6 +55,13 @@
                 android:src="@drawable/free_rider"
                 app:layout_constraintBottom_toTopOf="@+id/route_title"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/climber_marker"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@android:drawable/ic_menu_myplaces"
+                app:tint="@color/climberColour" />
 
             <TextView
                 android:id="@+id/route_title"

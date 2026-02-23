@@ -5,6 +5,8 @@ from sklearn.impute import IterativeImputer
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.preprocessing import OrdinalEncoder
 
+# Fill in missing data values
+
 # 1. Load the data with 'latin1' encoding to handle special characters
 # Update the path if your file is in a specific subfolder
 file_path = 'workout-generator//AssessmentDataSept2022.csv' 

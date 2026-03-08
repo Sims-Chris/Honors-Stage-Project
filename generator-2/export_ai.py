@@ -6,26 +6,43 @@ import warnings
 warnings.filterwarnings('ignore')
 
 print("1. Loading dataset...")
-df = pd.read_csv("reducedAssesmentData.csv")
+df = pd.read_csv("generator-2\\reducedAssesmentData.csv")
 
-# Input features (What the user enters)
 X = df[['bouldergrade_numeric', 'sex_encoded', 'height', 'weight']]
+y = df.fillna(0)
 
-# Target metrics (What the AI predicts)
-y_cols = ['pullup reps', 'weightedpull', 'maxhang', 'continuoushang', 'repeaters1', 'powl', 'powr', 'pushup reps']
-y = df[y_cols].fillna(0)
+# We map the inner Java class names to our CSV columns
+metrics = [
+    ("Pullups", "pullup reps"),
+    ("WeightedPull", "weightedpull"),
+    ("MaxHang", "maxhang"),
+    ("ContinuousHang", "continuoushang"),
+    ("Repeaters", "repeaters1"),
+    ("PowL", "powl"),
+    ("PowR", "powr"),
+    ("Pushups", "pushup reps")
+]
 
-print("2. Training AI Model for Mobile...")
-# Limit trees to keep the mobile file size small and fast
-ai_model = RandomForestRegressor(n_estimators=15, max_depth=6, random_state=42)
-ai_model.fit(X, y)
+print("2. Training 8 AI Models and Converting to Java...")
+java_code_combined = "public class BoulderingAI {\n\n"
 
-print("3. Converting AI to native Java code (This may take a minute)...")
-# Translate the model math into Java
-java_code = m2c.export_to_java(ai_model, class_name="BoulderingAI")
+for class_name, col_name in metrics:
+    print(f"   -> Exporting AI for: {col_name}")
+    # Train an individual model for each specific metric
+    model = RandomForestRegressor(n_estimators=15, max_depth=6, random_state=42)
+    model.fit(X, y[col_name])
+    
+    # Export just this model to Java
+    code = m2c.export_to_java(model, class_name=class_name)
+    
+    # Modify it to be an inner static class so they all fit in one neat file
+    code = code.replace(f"public class {class_name}", f"public static class {class_name}")
+    java_code_combined += code + "\n\n"
 
-print("4. Saving to BoulderingAI.java...")
+java_code_combined += "}\n"
+
+print("\n3. Saving to BoulderingAI.java...")
 with open("BoulderingAI.java", "w") as f:
-    f.write(java_code)
+    f.write(java_code_combined)
 
-print("Success! You can now drag BoulderingAI.java into Android Studio.")
+print("Success! You can now drag the new BoulderingAI.java into Android Studio.")

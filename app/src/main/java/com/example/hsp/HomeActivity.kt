@@ -32,6 +32,12 @@ class HomeActivity : AppCompatActivity() {
             finish()
         }
 
+        // In HomeActivity.onCreate
+        val generateWorkoutButton = findViewById<Button>(R.id.generate_workout_button)
+        generateWorkoutButton.setOnClickListener {
+            startActivity(Intent(this, GenerateWorkoutActivity::class.java))
+        }
+
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         bottomNavManager = BottomNavManager(this, bottomNavigationView)
     }

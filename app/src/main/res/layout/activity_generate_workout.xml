@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colourPrimary"
+    tools:context=".GenerateWorkoutActivity">
+
+    <include
+        layout="@layout/logo" />
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/app_name">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Your Stats"
+                android:textColor="@color/textColour"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <!-- Profile Info -->
+            <EditText
+                android:id="@+id/target_grade"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Target Grade (V-Scale)"
+                android:inputType="numberDecimal"
+                android:textColor="@color/textColour"
+                android:textColorHint="#9E9E9E" />
+
+            <EditText
+                android:id="@+id/sex"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Sex (0 for Female, 1 for Male)"
+                android:inputType="number"
+                android:textColor="@color/textColour"
+                android:textColorHint="#9E9E9E" />
+
+            <EditText
+                android:id="@+id/height"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Height (inches)"
+                android:inputType="numberDecimal"
+                android:textColor="@color/textColour"
+                android:textColorHint="#9E9E9E" />
+
+            <EditText
+                android:id="@+id/weight"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Weight (lbs)"
+                android:inputType="numberDecimal"
+                android:textColor="@color/textColour"
+                android:textColorHint="#9E9E9E" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Current Performance"
+                android:textColor="@color/textColour"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <!-- Performance Stats -->
+            <EditText
+                android:id="@+id/pullups"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Max Pullups"
+                android:inputType="numberDecimal"
+                android:textColor="@color/textColour" />
+
+            <EditText
+                android:id="@+id/weighted_pull"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Max Weighted Pull (Total lbs)"
+                android:inputType="numberDecimal"
+                android:textColor="@color/textColour" />
+
+            <EditText
+                android:id="@+id/maxhang"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Max Hang 20mm (lbs added)"
+                android:inputType="numberDecimal"
+                android:textColor="@color/textColour" />
+
+            <EditText
+                android:id="@+id/continuoushang"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Continuous Hang (sec)"
+                android:inputType="numberDecimal"
+                android:textColor="@color/textColour" />
+
+            <EditText
+                android:id="@+id/powl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Power Left"
+                android:inputType="numberDecimal"
+                android:textColor="@color/textColour" />
+
+            <EditText
+                android:id="@+id/powr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Power Right"
+                android:inputType="numberDecimal"
+                android:textColor="@color/textColour" />
+
+            <EditText
+                android:id="@+id/pushups"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Max Pushups"
+                android:inputType="numberDecimal"
+                android:textColor="@color/textColour" />
+
+            <Button
+                android:id="@+id/btn_generate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:backgroundTint="@color/buttonColour"
+                android:text="Generate Training Plan"
+                android:textColor="@color/textColour" />
+
+            <TextView
+                android:id="@+id/plan_output"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:padding="8dp"
+                android:textColor="@color/textColour"
+                android:textSize="14sp"
+                android:typeface="monospace" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <include
+        layout="@layout/bottom_nav"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

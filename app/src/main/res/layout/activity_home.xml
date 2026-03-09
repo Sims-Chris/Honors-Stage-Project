@@ -127,7 +127,7 @@
                 android:id="@+id/generate_workout_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Bouldering AI"
+                android:text="AI Powered Training Plan Generator"
                 android:textColor="@color/textColour"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"

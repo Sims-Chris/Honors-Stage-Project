@@ -14,6 +14,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import java.text.SimpleDateFormat
+import java.util.*
 
 class RouteActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRouteBinding
@@ -50,22 +52,54 @@ class RouteActivity : AppCompatActivity() {
 
     private fun getCompletionProgress() {
         val uid = auth.currentUser?.uid ?: return
-        db.collection("Users").document(uid).get().addOnSuccessListener { doc ->
-            if (doc.exists()) {
-                val completed = doc.getDouble("Completed") ?: 0.0
-                val length = doc.getDouble("Length") ?: 1.0
-                val progress = (completed / length).toFloat().coerceIn(0f, 1f)
+        val dateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
+        val today = Calendar.getInstance().apply {
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }.time
 
-                drawPathAndPositionClimber(progress)
+        db.collection("Users").document(uid).collection("Training Plan")
+            .get()
+            .addOnSuccessListener { documents ->
+                val dates = mutableListOf<Date>()
+                for (doc in documents) {
+                    try {
+                        dateFormat.parse(doc.id)?.let { dates.add(it) }
+                    } catch (e: Exception) {
+                        Log.e("RouteActivity", "Error parsing date: ${doc.id}", e)
+                    }
+                }
+
+                if (dates.isNotEmpty()) {
+                    val minDate = dates.minOrNull()!!
+                    val maxDate = dates.maxOrNull()!!
+
+                    val totalDuration = maxDate.time - minDate.time
+                    val progress = if (totalDuration > 0) {
+                        (today.time - minDate.time).toFloat() / totalDuration.toFloat()
+                    } else {
+                        if (today.after(maxDate)) 1f else 0f
+                    }
+
+                    drawPathAndPositionClimber(progress.coerceIn(0f, 1f))
+                } else {
+                    // No training plan found, stay at bottom
+                    drawPathAndPositionClimber(0f)
+                }
             }
-        }.addOnFailureListener { e ->
-            Log.e("RouteActivity", "Error fetching progress", e)
-        }
+            .addOnFailureListener { e ->
+                Log.e("RouteActivity", "Error fetching training plan dates", e)
+                drawPathAndPositionClimber(0f)
+            }
     }
 
     private fun drawPathAndPositionClimber(progress: Float) {
         val w = binding.routeImage.width.toFloat()
         val h = binding.routeImage.height.toFloat()
+
+        if (w == 0f || h == 0f) return
 
         // Define the Route Path (coordinates scaled to image size)
         // These points approximate the red line from bottom to top

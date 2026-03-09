@@ -1,5 +1,6 @@
 package com.example.hsp
 
+import java.io.Serializable
 import kotlin.math.floor
 
 data class TrainingExercise(
@@ -9,7 +10,7 @@ data class TrainingExercise(
     var reps: String,
     val time: String,
     val rest: String
-)
+) : Serializable
 
 object TrainingPlanGenerator {
 
@@ -44,14 +45,14 @@ object TrainingPlanGenerator {
         )
     )
 
-    fun generatePlan(
+    fun generatePlanStructured(
         targetGrade: Double,
         sex: Double,
         height: Double,
         weight: Double,
         actuals: Map<String, Double>,
         activeDays: List<String>
-    ): String {
+    ): Map<String, List<TrainingExercise>> {
         
         val userProfile = doubleArrayOf(targetGrade, sex, height, weight)
         
@@ -100,16 +101,23 @@ object TrainingPlanGenerator {
             poolOfExercises.addAll(available.shuffled().take(2).map { it.copy() })
         }
 
-        while (poolOfExercises.size < activeDays.size * 4) {
+        // Safer padding: don't loop infinitely if bank is exhausted
+        var attempts = 0
+        while (poolOfExercises.size < activeDays.size * 4 && attempts < 100) {
+            attempts++
             val extraCat = listOf("finger_strength", "pulling_strength", "antagonist", "finger_endurance").random()
             val extraEx = exerciseBank[extraCat]?.random()?.copy()
             if (extraEx != null && !poolOfExercises.any { it.name == extraEx.name }) {
                 poolOfExercises.add(extraEx)
             }
         }
-
-        val stringBuilder = StringBuilder()
-        stringBuilder.append("struct{ Name : weight : sets : reps : time for exercise : rest time\n\n")
+        
+        // If we still need more, just allow duplicates but distinct instances
+        while (poolOfExercises.size < activeDays.size * 4) {
+            val extraCat = exerciseBank.keys.random()
+            val extraEx = exerciseBank[extraCat]?.random()?.copy()
+            if (extraEx != null) poolOfExercises.add(extraEx)
+        }
 
         val schedule = mutableMapOf<String, MutableList<TrainingExercise>>()
         activeDays.forEach { schedule[it] = mutableListOf() }
@@ -130,6 +138,21 @@ object TrainingPlanGenerator {
 
             schedule[day]?.add(exInstance)
         }
+
+        return schedule
+    }
+
+    fun generatePlan(
+        targetGrade: Double,
+        sex: Double,
+        height: Double,
+        weight: Double,
+        actuals: Map<String, Double>,
+        activeDays: List<String>
+    ): String {
+        val schedule = generatePlanStructured(targetGrade, sex, height, weight, actuals, activeDays)
+        val stringBuilder = StringBuilder()
+        stringBuilder.append("struct{ Name : weight : sets : reps : time for exercise : rest time\n\n")
 
         for (day in activeDays) {
             stringBuilder.append("$day[\n")

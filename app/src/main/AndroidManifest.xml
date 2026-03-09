@@ -38,6 +38,9 @@
         <activity
             android:name=".GenerateWorkoutActivity"
             android:exported="false" />
+        <activity
+            android:name=".PlanPreviewActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

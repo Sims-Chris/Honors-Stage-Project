@@ -163,13 +163,35 @@ class PlanPreviewActivity : AppCompatActivity() {
             "Saturday" to Calendar.SATURDAY
         )
 
+        // Calculate total exercises across all weeks
+        var totalExercisesPerWeek = 0
+        weeklyPlan?.values?.forEach { exercises ->
+            totalExercisesPerWeek += exercises.size
+        }
+        val totalIncomplete = totalExercisesPerWeek * numWeeks
+
         deleteAllWorkouts {
+            // Update User Metadata
+            val userRef = db.collection("Users").document(currentUser.uid)
+            val updates = hashMapOf<String, Any>(
+                "Incomplete" to totalIncomplete,
+                "TotalPlanned" to totalIncomplete,
+                "TotalCompleted" to 0 // Reset completed count for a new plan? 
+                // Or maybe the user wants TotalCompleted to be lifetime? 
+                // Usually it's better to keep lifetime but if they are generating a NEW plan, 
+                // maybe they want to start over. However, TotalCompleted usually implies lifetime.
+            )
+            // If they want "X / Y", reset is probably not wanted if TotalCompleted is lifetime.
+            // But they said "same number as Incomplete on generation" for "total workouts made".
+            
+            batch.update(userRef, updates)
+
             for (week in 0 until numWeeks) {
                 weeklyPlan?.forEach { (dayName, exercises) ->
                     val calendar = Calendar.getInstance()
                     val targetDay = dayOfWeekMap[dayName]!!
                     var daysUntil = targetDay - calendar.get(Calendar.DAY_OF_WEEK)
-                    if (daysUntil <= 0) daysUntil += 7
+                    if (daysUntil < 0) daysUntil += 7
                     
                     calendar.add(Calendar.DAY_OF_YEAR, daysUntil + (week * 7))
                     val dateString = dateFormat.format(calendar.time)
@@ -181,7 +203,8 @@ class PlanPreviewActivity : AppCompatActivity() {
                             "Sets" to ex.sets,
                             "Reps" to ex.reps,
                             "Time" to ex.time,
-                            "Rest" to ex.rest
+                            "Rest" to ex.rest,
+                            "Completed" to ex.completed
                         )
                     }
                     val workoutData = mapOf("exercises" to exerciseList)

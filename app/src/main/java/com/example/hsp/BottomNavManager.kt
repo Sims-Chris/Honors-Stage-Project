@@ -16,7 +16,7 @@ class BottomNavManager(private val activity: Activity, private val bottomNavigat
                 R.id.nav_home -> HomeActivity::class.java
                 R.id.nav_calendar -> CalendarActivity::class.java
                 R.id.nav_route -> RouteActivity::class.java
-                R.id.nav_profile -> ProfileActivity::class.java
+                R.id.nav_stats -> StatsActivity::class.java
                 else -> null
             }
 

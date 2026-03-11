@@ -13,7 +13,7 @@
         android:icon="@drawable/clipboard"
         android:title="Route" />
     <item
-        android:id="@+id/nav_profile"
-        android:icon="@drawable/profile"
-        android:title="Profile" />
+        android:id="@+id/nav_stats"
+        android:icon="@drawable/bar_chart"
+        android:title="Stats" />
 </menu>

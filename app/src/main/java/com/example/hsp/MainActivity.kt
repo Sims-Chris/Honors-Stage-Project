@@ -102,7 +102,8 @@ class MainActivity : AppCompatActivity() {
                             val user = hashMapOf(
                                 "FirstName" to fName,
                                 "LastName" to lName,
-                                "Email" to email
+                                "Email" to email,
+                                "TotalCompleted" to 0
                                 // Password should not be stored in Firestore for security
                             )
                             db.collection("Users").document(userId)

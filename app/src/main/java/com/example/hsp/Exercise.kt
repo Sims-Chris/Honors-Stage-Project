@@ -5,5 +5,6 @@ data class Exercise(
     val sets: Int,
     val reps: Int,
     val duration: Long? = null, // Duration in seconds
-    val rest: Long? = null      // Rest in seconds
+    val rest: Long? = null,      // Rest in seconds
+    var completed: Boolean = false
 )

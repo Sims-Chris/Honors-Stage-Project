@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.button.MaterialButton
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
 import java.util.*
@@ -41,6 +42,7 @@ class WorkoutActivity : AppCompatActivity() {
     private var timeRemainingInMillis: Long = 0
     private var isTimerRunning = false
     private var isResting = false
+    private var activeUserDocId: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,6 +91,7 @@ class WorkoutActivity : AppCompatActivity() {
             .get()
             .addOnSuccessListener { document ->
                 if (document != null && document.exists()) {
+                    activeUserDocId = userDocId
                     exercises.clear()
                     
                     val exercisesList = document.get("exercises") as? List<Map<String, Any>>
@@ -99,13 +102,14 @@ class WorkoutActivity : AppCompatActivity() {
                             val repsStr = data["Reps"]?.toString() ?: "1"
                             val timeStr = data["Time"]?.toString() ?: "0"
                             val restStr = data["Rest"]?.toString() ?: "0"
+                            val completed = data["Completed"] as? Boolean ?: false
                             
                             val sets = setsStr.toIntOrNull() ?: 1
                             val reps = repsStr.toIntOrNull() ?: 1
                             val duration = timeStr.toLongOrNull() ?: 0L
                             val rest = restStr.toLongOrNull() ?: 0L
                             
-                            exercises.add(Exercise(name, sets, reps, if (duration > 0) duration else null, if (rest > 0) rest else null))
+                            exercises.add(Exercise(name, sets, reps, if (duration > 0) duration else null, if (rest > 0) rest else null, completed))
                         }
                     } else {
                         val data = document.data
@@ -121,18 +125,29 @@ class WorkoutActivity : AppCompatActivity() {
                                 val repsStr = getField(value, "Reps")
                                 val timeStr = getField(value, "Time")
                                 val restStr = getField(value, "Rest")
+                                val completed = (value["Completed"] ?: value["completed"]) as? Boolean ?: false
 
                                 val sets = setsStr.toIntOrNull() ?: 1
                                 val reps = repsStr.toIntOrNull() ?: 1
                                 val duration = timeStr.toLongOrNull() ?: 0L
                                 val rest = restStr.toLongOrNull() ?: 0L
 
-                                exercises.add(Exercise(name, sets, reps, if (duration > 0) duration else null, if (rest > 0) rest else null))
+                                exercises.add(Exercise(name, sets, reps, if (duration > 0) duration else null, if (rest > 0) rest else null, completed))
                             }
                         }
                     }
 
                     if (exercises.isNotEmpty()) {
+                        val allDone = exercises.all { it.completed }
+                        if (allDone) {
+                            Toast.makeText(this@WorkoutActivity, "You have already completed today's workout!", Toast.LENGTH_SHORT).show()
+                            finish()
+                            onResult(true)
+                            return@addOnSuccessListener
+                        }
+
+                        // Find first uncompleted exercise
+                        currentExerciseIndex = exercises.indexOfFirst { !it.completed }.coerceAtLeast(0)
                         updateExerciseUI()
                         onResult(true)
                     } else {
@@ -160,7 +175,7 @@ class WorkoutActivity : AppCompatActivity() {
         if (isResting) {
             exerciseName.text = "Resting..."
         } else {
-            exerciseName.text = exercise.name
+            exerciseName.text = if (exercise.completed) "${exercise.name} (Done)" else exercise.name
         }
         updateRepAndSetCount()
         resetTimer()
@@ -206,6 +221,8 @@ class WorkoutActivity : AppCompatActivity() {
             currentRep = 1
             updateExerciseUI()
         } else if (nextSet > exercise.sets) {
+            markExerciseCompleted(currentExerciseIndex)
+            
             if (currentExerciseIndex < exercises.size - 1) {
                 currentExerciseIndex++
                 currentSet = 1
@@ -214,6 +231,52 @@ class WorkoutActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(this, "Workout Complete!", Toast.LENGTH_SHORT).show()
                 finish()
+            }
+        }
+    }
+
+    private fun incrementExerciseStats() {
+        val currentUser = auth.currentUser ?: return
+        val docId = activeUserDocId ?: currentUser.uid
+        val userRef = db.collection("Users").document(docId)
+        
+        val updates = hashMapOf<String, Any>(
+            "TotalCompleted" to FieldValue.increment(1),
+            "Incomplete" to FieldValue.increment(-1)
+        )
+        
+        userRef.update(updates)
+            .addOnFailureListener { e ->
+                Log.e("WorkoutActivity", "Error updating workout stats", e)
+            }
+    }
+
+    private fun markExerciseCompleted(index: Int) {
+        if (index !in exercises.indices) return
+        val exercise = exercises[index]
+        if (exercise.completed) return
+        
+        exercise.completed = true
+        incrementExerciseStats()
+        
+        val currentUser = auth.currentUser ?: return
+        val docId = activeUserDocId ?: currentUser.uid
+        val dateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
+        val today = dateFormat.format(Date())
+        
+        val docRef = db.collection("Users").document(docId)
+            .collection("Training Plan").document(today)
+            
+        docRef.get().addOnSuccessListener { document ->
+            if (document.exists()) {
+                val exercisesList = document.get("exercises") as? MutableList<Map<String, Any>>
+                if (exercisesList != null && index < exercisesList.size) {
+                    val updatedList = exercisesList.toMutableList()
+                    val updatedExercise = updatedList[index].toMutableMap()
+                    updatedExercise["Completed"] = true
+                    updatedList[index] = updatedExercise
+                    docRef.update("exercises", updatedList)
+                }
             }
         }
     }

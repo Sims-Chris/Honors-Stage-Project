@@ -9,7 +9,8 @@ data class TrainingExercise(
     val sets: String,
     var reps: String,
     val time: String,
-    val rest: String
+    val rest: String,
+    var completed: Boolean = false
 ) : Serializable
 
 object TrainingPlanGenerator {
@@ -152,7 +153,7 @@ object TrainingPlanGenerator {
     ): String {
         val schedule = generatePlanStructured(targetGrade, sex, height, weight, actuals, activeDays)
         val stringBuilder = StringBuilder()
-        stringBuilder.append("struct{ Name : weight : sets : reps : time for exercise : rest time\n\n")
+        stringBuilder.append("struct{ Name : weight : sets : reps : time for exercise : rest time : completed\n\n")
 
         for (day in activeDays) {
             stringBuilder.append("$day[\n")
@@ -160,7 +161,7 @@ object TrainingPlanGenerator {
             for (j in exercisesToday.indices) {
                 val ex = exercisesToday[j]
                 val comma = if (j < exercisesToday.size - 1) "," else ","
-                stringBuilder.append("    ${ex.name} : ${ex.weight} : ${ex.sets} : ${ex.reps} : ${ex.time} : ${ex.rest}$comma\n")
+                stringBuilder.append("    ${ex.name} : ${ex.weight} : ${ex.sets} : ${ex.reps} : ${ex.time} : ${ex.rest} : ${ex.completed}$comma\n")
             }
             stringBuilder.append("]\n\n")
         }

@@ -61,7 +61,9 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:src="@android:drawable/ic_menu_myplaces"
-                app:tint="@color/climberColour" />
+                app:tint="@color/climberColour"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
 
             <TextView
                 android:id="@+id/route_title"

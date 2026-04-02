@@ -2,6 +2,8 @@ package com.example.hsp
 
 import org.junit.Test
 import org.junit.Assert.*
+import com.google.firebase.firestore.FirebaseFirestore
+
 
 class AppLogicTestSuite {
 
@@ -40,5 +42,14 @@ class AppLogicTestSuite {
 
         exercise.completed = true
         assertTrue(exercise.completed)
+    }
+
+    @Test
+    fun checkDbConnection(){
+        lateinit var db: FirebaseFirestore
+
+        db = FirebaseFirestore.getInstance()
+
+        assertNotNull("Firebase instance should be initialized", db)
     }
 }

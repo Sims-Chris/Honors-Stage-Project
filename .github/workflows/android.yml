@@ -1,0 +1,37 @@
+name: Android CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      # 1. Build Verification: Compiles the app to ensure no syntax/dependency errors
+      - name: Build with Gradle
+        run: ./gradlew assembleDebug
+
+      # 2. Linting: Checks for code style and potential bugs
+      - name: Run Lint
+        run: ./gradlew lintDebug
+
+      # 3. Unit Tests: Runs local tests (like your addition_isCorrect test)
+      - name: Run Unit Tests
+        run: ./gradlew testDebugUnitTest

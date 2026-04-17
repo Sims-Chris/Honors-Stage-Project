@@ -98,8 +98,8 @@ class HomeActivity : AppCompatActivity() {
             .addOnSuccessListener { document ->
                 if (document != null && document.exists()) {
                     val completed = document.getLong("TotalCompleted") ?: 0
-                    val planned = document.getLong("TotalPlanned") ?: 0
-                    totalWorkoutsTextView.text = "$completed / $planned"
+                    //val planned = document.getLong("TotalPlanned") ?: 0 // Dont want planned, as this is total, even across multiple plans
+                    totalWorkoutsTextView.text = "$completed"
                 }
             }
             .addOnFailureListener { e ->
@@ -172,7 +172,7 @@ class HomeActivity : AppCompatActivity() {
                     }
                 }
                 
-                // Now check from yesterday backwards
+                // Now we check from yesterday backwards
                 calendar.add(Calendar.DAY_OF_YEAR, -1)
                 
                 var daysChecked = 0
@@ -247,7 +247,6 @@ class HomeActivity : AppCompatActivity() {
                         details.append("\n")
                     }
 
-                    // 1. Try NEW format (list of maps)
                     val exercisesList = document.get("exercises") as? List<Map<String, Any>>
                     if (exercisesList != null && exercisesList.isNotEmpty()) {
                         exercisesFound = true
@@ -269,42 +268,12 @@ class HomeActivity : AppCompatActivity() {
                             
                             appendExerciseWithIcon(name, completed, stats)
                         }
-                    } else {
-                        // 2. Try OLD format (top-level fields are exercises)
-                        val data = document.data
-                        data?.forEach { (key, value) ->
-                            if (value is Map<*, *>) {
-                                exercisesFound = true
-                                val name = key.toString()
-                                
-                                fun getField(map: Map<*, *>, fieldName: String): String {
-                                    return (map[fieldName] ?: map["$fieldName "] ?: map[fieldName.lowercase()] ?: map["${fieldName.lowercase()} "])?.toString() ?: ""
-                                }
-
-                                val sets = getField(value, "Sets")
-                                val reps = getField(value, "Reps")
-                                val weight = getField(value, "Weight")
-                                val time = getField(value, "Time")
-                                val completed = (value["Completed"] ?: value["completed"]) as? Boolean ?: false
-
-                                if (!completed) allCompleted = false
-
-                                val stats = mutableListOf<String>()
-                                if (isValid(sets)) stats.add("Sets: $sets")
-                                if (isValid(reps)) stats.add("Reps: $reps")
-                                if (isValid(time)) stats.add("Time: ${time}s")
-                                if (isValid(weight) && !weight.contains("add or remove weight")) stats.add("Weight: $weight")
-
-                                appendExerciseWithIcon(name, completed, stats)
-                            }
-                        }
                     }
 
                     if (exercisesFound) {
                         workoutTitle.text = if (allCompleted) "Today's Plan (Completed)" else "Today's Plan"
                         workoutSubtitle.text = "Scheduled for $dateString"
                         
-                        // Remove trailing newline
                         if (details.isNotEmpty() && details.last() == '\n') {
                             details.delete(details.length - 1, details.length)
                         }

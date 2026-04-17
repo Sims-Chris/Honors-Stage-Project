@@ -29,11 +29,9 @@ class RouteActivity : AppCompatActivity() {
         auth = Firebase.auth
         db = Firebase.firestore
 
-        // 1. Initialize Navigation Bar using your BottomNavManager
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         bottomNavManager = BottomNavManager(this, bottomNavigationView)
 
-        // 2. Setup Logout (matching CalendarActivity style)
         findViewById<MaterialButton>(R.id.logout_button).setOnClickListener {
             auth.signOut()
             val intent = Intent(this, MainActivity::class.java)
@@ -42,7 +40,7 @@ class RouteActivity : AppCompatActivity() {
             finish()
         }
 
-        // 3. Wait for image to load to calculate the path coordinates
+        // Wait for image to load to calculate the path coordinates
         binding.routeImage.post {
             getCompletionProgress()
         }
@@ -116,7 +114,6 @@ class RouteActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        // Highlight the Route tab in the navbar
         bottomNavManager.setupBottomNav(R.id.nav_route)
     }
 }

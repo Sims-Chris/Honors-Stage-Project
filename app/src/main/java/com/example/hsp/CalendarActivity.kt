@@ -100,8 +100,7 @@ class CalendarActivity : AppCompatActivity() {
 
                 if (document.exists()) {
                     val workouts = mutableListOf<WorkoutSummary>()
-                    
-                    // 1. Try NEW format (list of maps)
+
                     val exercisesList = document.get("exercises") as? List<Map<String, Any>>
                     if (exercisesList != null && exercisesList.isNotEmpty()) {
                         exercisesList.forEach { ex ->
@@ -119,32 +118,6 @@ class CalendarActivity : AppCompatActivity() {
                             
                             val summaryText = if (stats.isNotEmpty()) stats.joinToString(" | ") else ""
                             workouts.add(WorkoutSummary(dateString, name, "", summaryText))
-                        }
-                    } else {
-                        // 2. Try OLD format (top-level fields)
-                        val data = document.data
-                        data?.forEach { (key, value) ->
-                            if (value is Map<*, *>) {
-                                val name = key.toString()
-                                
-                                fun getField(map: Map<*, *>, fieldName: String): String {
-                                    return (map[fieldName] ?: map["$fieldName "] ?: map[fieldName.lowercase()] ?: map["${fieldName.lowercase()} "])?.toString() ?: ""
-                                }
-
-                                val sets = getField(value, "Sets")
-                                val reps = getField(value, "Reps")
-                                val weight = getField(value, "Weight")
-                                val time = getField(value, "Time")
-                                
-                                val stats = mutableListOf<String>()
-                                if (isValid(sets)) stats.add("Sets: $sets")
-                                if (isValid(reps)) stats.add("Reps: $reps")
-                                if (isValid(time)) stats.add("Time: ${time}s")
-                                if (isValid(weight) && !weight.contains("add or remove weight")) stats.add("Weight: $weight")
-                                
-                                val summaryText = if (stats.isNotEmpty()) stats.joinToString(" | ") else ""
-                                workouts.add(WorkoutSummary(dateString, name, "", summaryText))
-                            }
                         }
                     }
                     

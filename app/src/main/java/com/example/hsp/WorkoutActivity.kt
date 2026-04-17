@@ -333,23 +333,17 @@ class WorkoutActivity : AppCompatActivity() {
         val exercise = exercises[currentExerciseIndex]
 
         if (!isResting) {
-            // Finished a timed rep
             if (currentRep < exercise.reps) {
-                // More reps in same set - move to next rep, no rest
                 changeRep(1)
             } else {
-                // Finished last rep of set
                 if (currentSet < exercise.sets && exercise.rest != null && exercise.rest > 0) {
-                    // Start resting before next set
                     isResting = true
                     updateExerciseUI()
                 } else {
-                    // Last set or no rest. Move to next set/exercise.
                     changeSet(1)
                 }
             }
         } else {
-            // Rest finished
             isResting = false
             changeSet(1)
         }

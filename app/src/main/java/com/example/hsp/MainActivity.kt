@@ -104,7 +104,7 @@ class MainActivity : AppCompatActivity() {
                                 "LastName" to lName,
                                 "Email" to email,
                                 "TotalCompleted" to 0
-                                // Password should not be stored in Firestore for security
+
                             )
                             db.collection("Users").document(userId)
                                 .set(user)

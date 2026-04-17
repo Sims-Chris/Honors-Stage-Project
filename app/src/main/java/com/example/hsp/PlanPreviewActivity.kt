@@ -171,18 +171,12 @@ class PlanPreviewActivity : AppCompatActivity() {
         val totalIncomplete = totalExercisesPerWeek * numWeeks
 
         deleteAllWorkouts {
-            // Update User Metadata
             val userRef = db.collection("Users").document(currentUser.uid)
             val updates = hashMapOf<String, Any>(
                 "Incomplete" to totalIncomplete,
                 "TotalPlanned" to totalIncomplete,
-                "TotalCompleted" to 0 // Reset completed count for a new plan? 
-                // Or maybe the user wants TotalCompleted to be lifetime? 
-                // Usually it's better to keep lifetime but if they are generating a NEW plan, 
-                // maybe they want to start over. However, TotalCompleted usually implies lifetime.
             )
-            // If they want "X / Y", reset is probably not wanted if TotalCompleted is lifetime.
-            // But they said "same number as Incomplete on generation" for "total workouts made".
+
             
             batch.update(userRef, updates)
 

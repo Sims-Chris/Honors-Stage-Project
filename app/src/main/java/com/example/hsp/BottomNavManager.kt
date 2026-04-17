@@ -25,8 +25,8 @@ class BottomNavManager(private val activity: Activity, private val bottomNavigat
                 // Re-use the existing activity instance if it's in the backstack
                 intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
                 activity.startActivity(intent)
-                
-                // Add a simple crossfade animation for a smoother feel
+
+
                 activity.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                 true
             } else {
